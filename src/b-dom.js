@@ -120,6 +120,28 @@
 
 		return this;
 	};
+	HtmlHelper.prototype.delete = function() {
+		var eleList = this._get();
+		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
+			eleList[i].parentNode.removeChild(eleList[i]);
+		}
+
+		return this;
+	};
+
+	B.post = function(url, data, callback) {
+		var _this = this;
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json" );
+		xhr.send(JSON.stringify(data));
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4) {
+				var response = JSON.parse(xhr.response);
+				callback.apply(_this, [ response ]);
+			}
+		}
+	};
 
 	global.B = B;
 })(window);
