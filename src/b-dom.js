@@ -64,7 +64,7 @@
 	HtmlHelper.prototype.addClass = function(className) {
 		var eleList = this._get();
 		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
-			var classes = eleList[i].getAttribute('class');
+			var classes = eleList[i].getAttribute('class') || '';
 			if (classes.indexOf(className) === -1) {
 				eleList[i].setAttribute('class', classes + ' ' + className);
 			}
