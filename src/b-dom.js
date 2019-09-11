@@ -8,7 +8,7 @@
 (function(global) {
 	var htmlHelper = new HtmlHelper();
 	function B(selector) {
-		if (typeof selector !== 'string') {
+		if (typeof selector === 'object') {
 			return selector;
 		}
 
@@ -58,15 +58,15 @@
 		return this;
 	};
 	HtmlHelper.prototype.hide = function(callback) {
-			var _this = this;
-			var eleList = _this._get();
-			for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
-				if (eleList[i].style.display === 'none') continue;
+		var _this = this;
+		var eleList = _this._get();
+		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
+			if (eleList[i].style.display === 'none') continue;
 
-				_this.styleChanges = _this.styleChanges || {};
-				_this.styleChanges['display'] = eleList[i].style.display;
-				eleList[i].style.display = 'none';
-			}
+			_this.styleChanges = _this.styleChanges || {};
+			_this.styleChanges['display'] = eleList[i].style.display;
+			eleList[i].style.display = 'none';
+		}
 
 		return _this;
 	};
