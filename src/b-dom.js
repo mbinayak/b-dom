@@ -6,12 +6,16 @@
  */
 'use strict';
 (function(global) {
-	var JQmicro = new HtmlHelper();
+	var htmlHelper = new HtmlHelper();
 	function B(selector) {
+		if (typeof selector !== 'string') {
+			return selector;
+		}
+
 		function A() {
 			this.selector = selector;
 		}
-		A.prototype = JQmicro;
+		A.prototype = htmlHelper;
 		return new A();
 	}
 
@@ -28,7 +32,7 @@
 		var eleList = _this._get();
 		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++)
 			eleList[i].addEventListener(eventType, function(e) {
-				callback(e, eleList);
+				callback.apply(_this, [e, eleList]);
 			});
 
 		return _this;
@@ -66,6 +70,14 @@
 
 		return _this;
 	};
+	HtmlHelper.prototype.html = function(htmlText) {
+		var eleList = this._get();
+		if (eleList && eleList.length) {
+			eleList[0].innerHTML = htmlText;
+		}
+
+		return this;
+	};
 	HtmlHelper.prototype.show = function(callback) {
 		var _this = this;
 		var eleList = _this._get();
@@ -91,6 +103,15 @@
 		return this;
 	};
 	HtmlHelper.prototype.removeClass = function(className) {
+		var eleList = this._get();
+		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
+			var classes = eleList[i].getAttribute('class') || '';
+			eleList[i].setAttribute('class', classes.replace(className, '').trim());
+		}
+
+		return this;
+	};
+	HtmlHelper.prototype.value = function(className) {
 		var eleList = this._get();
 		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
 			var classes = eleList[i].getAttribute('class') || '';
