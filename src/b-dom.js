@@ -54,13 +54,15 @@
 		return this;
 	};
 	HtmlHelper.prototype.hide = function(callback) {
-		var _this = this;
-		var eleList = _this._get();
-		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
-			_this.styleChanges = _this.styleChanges || {};
-			_this.styleChanges['display'] = eleList[i].style.display;
-			eleList[i].style.display = 'none';
-		}
+			var _this = this;
+			var eleList = _this._get();
+			for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
+				if (eleList[i].style.display === 'none') continue;
+
+				_this.styleChanges = _this.styleChanges || {};
+				_this.styleChanges['display'] = eleList[i].style.display;
+				eleList[i].style.display = 'none';
+			}
 
 		return _this;
 	};
@@ -69,7 +71,7 @@
 		var eleList = _this._get();
 		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
 			if (eleList[i].style.display === 'none') {
-				eleList[i].style.display = _this.styleChanges && _this.styleChanges['display'] || '';
+				eleList[i].style.display = _this.styleChanges && _this.styleChanges['display'] || 'block';
 			}
 		}
 
@@ -80,7 +82,9 @@
 		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
 			var classes = eleList[i].getAttribute('class') || '';
 			if (classes.indexOf(className) === -1) {
-				eleList[i].setAttribute('class', classes + ' ' + className);
+				classes = classes.trim();
+				classes = classes.length ? classes + ' ' + className : className;
+				eleList[i].setAttribute('class', classes);
 			}
 		}
 
@@ -89,7 +93,8 @@
 	HtmlHelper.prototype.removeClass = function(className) {
 		var eleList = this._get();
 		for (var i = 0, l = eleList && eleList.length || 0; i < l; i++) {
-			eleList[i].setAttribute('class', eleList[i].getAttribute('class').replace(className, ''));
+			var classes = eleList[i].getAttribute('class') || '';
+			eleList[i].setAttribute('class', classes.replace(className, '').trim());
 		}
 
 		return this;
@@ -97,4 +102,3 @@
 
 	global.B = B;
 })(window);
-
