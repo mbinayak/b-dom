@@ -130,15 +130,20 @@
 	};
 
 	B.post = function(url, data, callback) {
-		var _this = this;
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
 		xhr.setRequestHeader("Content-Type", "application/json" );
 		xhr.send(JSON.stringify(data));
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4) {
-				var response = JSON.parse(xhr.response);
-				callback.apply(_this, [ response ]);
+				if (xhr.response) {
+					console.log(xhr.response);
+					var response = JSON.parse(xhr.response);
+					callback({
+						status: xhr.status,
+						response: response
+					});
+				}
 			}
 		}
 	};
